@@ -1,2 +1,2 @@
-# brackets-expand-selection-to-quotes
-use ctrl+' to expand selection to single/double quotes
+# Expand to quotes for Brackets
+use ctrl(cmd)+shift+' to expand selection to nearest single/double quotes around cursor
