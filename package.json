@@ -1,0 +1,12 @@
+{
+    "name": "pd.expand-selection-to-quotes",
+    "title": "Expand Selection to Quotes",
+    "description": "Expand selection to quotes.",
+    "homepage": "https://github.com/itbaby/brackets-expand-selection-to-quotes",
+    "version": "1.0.0",
+    "author": "Pete D.",
+    "license": "GPL-3.0",
+    "engines": {
+        "brackets": "<=3.0"
+    }
+}
