@@ -36,7 +36,7 @@ define(function(require,exports,module){
         var currentLine      = EditorManager.getFocusedEditor().document.getLine(currentSelection.start.line),
             beforeCursor     = currentLine.substr(0,currentSelection.start.ch),
             afterCursor      = currentLine.substr(currentSelection.end.ch),
-            firstQuote       = beforeCursor.lastIndexOf("'") > -1 ? beforeCursor.lastIndexOf("'") : (beforeCursor.lastIndexOf('"') > -1 ? beforeCursor.lastIndexOf('"') : -1),
+            firstQuote       = beforeCursor.lastIndexOf("'") > beforeCursor.lastIndexOf('"') ? beforeCursor.lastIndexOf("'") : (beforeCursor.lastIndexOf('"') > -1 ? beforeCursor.lastIndexOf('"') : -1),
             firstQuoteType   = currentLine[firstQuote],
             lastQuote        = afterCursor.indexOf(firstQuoteType) > -1 ? afterCursor.indexOf(firstQuoteType) : (afterCursor.indexOf(firstQuoteType == "'" ? "'" : '"') > -1 ? afterCursor.indexOf(firstQuoteType == "'" ? "'" : '"') : -1);
         

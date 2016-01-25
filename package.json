@@ -3,7 +3,7 @@
     "title": "Expand Text Selection to Quotes",
     "description": "Expand the current text selection to the nearest quotes. Press again to expand outward up to the outermost of the line.",
     "homepage": "https://github.com/pdichiara/expand-to-quotes-brackets",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "author": "Pete DiChiara",
     "license": "GPL-3.0",
     "engines": {
