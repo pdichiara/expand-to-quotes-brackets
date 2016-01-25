@@ -10,32 +10,51 @@ define(function(require,exports,module){
         CMD_SELECT_TO_QUOTES = 'quotes.select';
     
     function selectBetweenQutoes(){
-        var editor = EditorManager.getFocusedEditor();
+        var currentSelection = EditorManager.getFocusedEditor().getSelection();
+        if((currentSelection.start.line == currentSelection.end.line) && (currentSelection.start.ch != currentSelection.end.ch)) {
+            expandFurther(currentSelection);
+        }
+        else {
+            expand(currentSelection);
+        }
         
-        var cursorPosition  = editor.getCursorPos(),
-            currentLine     = editor.document.getLine(cursorPosition.line);
+    }
+    function expandFurther(currentSelection) {
+        var quoteSelection = {
+            start:{
+                line: currentSelection.start.line,
+                ch: currentSelection.start.ch-1
+            },
+            end:{
+                line: currentSelection.end.line,
+                ch: currentSelection.end.ch+1
+            }
+        };
+        expand(quoteSelection);
+    }
+    function expand(currentSelection) {
+        var currentLine      = EditorManager.getFocusedEditor().document.getLine(currentSelection.start.line),
+            beforeCursor     = currentLine.substr(0,currentSelection.start.ch),
+            afterCursor      = currentLine.substr(currentSelection.end.ch),
+            firstQuote       = beforeCursor.lastIndexOf("'") > -1 ? beforeCursor.lastIndexOf("'") : (beforeCursor.lastIndexOf('"') > -1 ? beforeCursor.lastIndexOf('"') : -1),
+            firstQuoteType   = currentLine[firstQuote],
+            lastQuote        = afterCursor.indexOf(firstQuoteType) > -1 ? afterCursor.indexOf(firstQuoteType) : (afterCursor.indexOf(firstQuoteType == "'" ? "'" : '"') > -1 ? afterCursor.indexOf(firstQuoteType == "'" ? "'" : '"') : -1);
         
-        var beforeCursor = currentLine.substr(0,cursorPosition.ch),
-        afterCursor      = currentLine.substr(cursorPosition.ch),
-        firstQuote       = beforeCursor.lastIndexOf("'") > -1 ? beforeCursor.lastIndexOf("'") : (beforeCursor.lastIndexOf('"') > -1 ? beforeCursor.lastIndexOf('"') : -1),
-        firstQuoteType   = currentLine[firstQuote],
-        lastQuote        = afterCursor.indexOf(firstQuoteType) > -1 ? afterCursor.indexOf(firstQuoteType) : (afterCursor.indexOf(firstQuoteType == "'" ? "'" : '"') > -1 ? afterCursor.indexOf(firstQuoteType == "'" ? "'" : '"') : -1);
+        if(firstQuote == -1) {
+            return false;
+        } else {
+            lastQuote = currentSelection.start.ch + (currentSelection.end.ch - currentSelection.start.ch) - firstQuote + lastQuote;
         
-        //beforeCursor = firstQuote > lastQuote ? firstQuote : lastQuote;
-        //afterCursor = beforeCursor > -1 ? firstQuote + lastQuote : currentLine[currentLine.length-1];
-        lastQuote = cursorPosition.ch - firstQuote + lastQuote;
-        
-        editor.setSelection({
-            line:cursorPosition.line,
-            ch: firstQuote + 1
+            EditorManager.getFocusedEditor().setSelection({
+                line:currentSelection.start.line,
+                ch: firstQuote + 1
 
-        },
-        {
-            line:cursorPosition.line,
-            ch: firstQuote + lastQuote
-        });
-
-
+            },
+            {
+                line:currentSelection.start.line,
+                ch: firstQuote + lastQuote
+            });
+        }
     }
     CommandManager.register(
         EXPAND_SELECTION_TO_QUOTES,
